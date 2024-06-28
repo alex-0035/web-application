@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Выгрузка данных</title>
+    {% include 'header.html' %}</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container mt-5">
+    <h1 class="mb-4">Выберите данные для выгрузки</h1>
+    <form method="POST" action="/export">
+        <div class="form-group mb-4">
+            <label for="table_name">Данные</label>
+            <select class="form-control" id="table_name" name="table_name">
+                {% for table in allowed_tables %}
+                    <option value="{{ table }}">{{ table }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Выгрузить</button>
+    </form>
+</div>
+{% include 'footer.html' %}
+</body>
+</html>

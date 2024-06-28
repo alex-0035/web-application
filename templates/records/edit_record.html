@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Редактировать</title>
+    {% include 'header.html' %}</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container mt-5">
+    <h1 class="mb-4">Редактирование записи в {{ table_name }}</h1>
+    <form method="POST" action="/edit/{{ table_name }}/{{ record_id }}">
+        {% for column in column_names %}
+            <div class="form-group mb-4">
+                <label for="column_{{ loop.index }}">{{ column }}</label>
+                <input type="text" class="form-control" id="column_{{ loop.index }}" name="column_{{ loop.index }}"
+                       value="{{ row[loop.index - 1] }}" required>
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+</div>
+{% include 'footer.html' %}
+</body>
+</html>

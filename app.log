@@ -1,0 +1,7 @@
+2024-01-02 13:43:50,987 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-01-02 13:43:50,987 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2024-01-02 13:43:52,602 INFO app Thread-1 (process_request_thread) : Page not found: http://127.0.0.1:5000/sdf
+2024-01-02 13:43:52,615 INFO werkzeug Thread-1 (process_request_thread) : 127.0.0.1 - - [02/Jan/2024 13:43:52] "[33mGET /sdf HTTP/1.1[0m" 404 -
+2024-01-02 13:43:52,648 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [02/Jan/2024 13:43:52] "[36mGET /static/icon.png HTTP/1.1[0m" 304 -
+2024-01-02 13:43:52,654 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [02/Jan/2024 13:43:52] "[36mGET /static/favicon.ico HTTP/1.1[0m" 304 -

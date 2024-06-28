@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Управление таблицей {{ table_name }}</title>
+    {% include 'header.html' %}
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container mt-5">
+    <h1>Данные из {{ table_name }}</h1>
+    <div class="row mb-3">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-dismissible alert-primary">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <ul class="list-unstyled mb-0">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+
+        <div class="col-md-6">
+            <div class="btn-group btn-block">
+
+                <a href="/add/{{ table_name }}" class="btn btn-primary btn-block"
+                   {% if session.get('allowed_add') == 0 %}disabled{% endif %}>Добавить
+                </a>
+                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        {% if session.get('allowed_add') == 0 %}disabled{% endif %}>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+
+                <div class="dropdown-menu">
+                    <form action="/add/{{ table_name }}/csv" method="POST" enctype="multipart/form-data"
+                          class="dropdown-item">
+                        <a class="dropdown-item">Добавить из .csv файла</a>
+                        <input type="file" name="csvFile" accept=".csv" class="form-control-file">
+
+                        <button type="submit" class="btn btn-primary btn-sm mt-2">Загрузить CSV</button>
+                    </form>
+                    <div class="dropdown-divider"></div>
+                    <form action="/add/{{ table_name }}/json" method="POST" enctype="multipart/form-data"
+                          class="dropdown-item">
+                        <a class="dropdown-item">Добавить из .json файла</a>
+                        <input type="file" name="jsonFile" accept=".json" class="form-control-file">
+                        <button type="submit" class="btn btn-primary btn-sm mt-2">Загрузить JSON</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <form action="" method="GET" class="form-inline">
+                <div class="form-group">
+                    <input type="text" name="q" class="form-control" placeholder="Поле поиска"
+                           value="{{ search_query }}"
+                           {% if session.get('allowed_search') == 0 %}disabled{% endif %}>
+                </div>
+                <button type="submit" class="btn btn-primary ml-2"
+                        {% if session.get('allowed_search') == 0 %}disabled{% endif %}>
+                    Поиск
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<table class="table table-responsive-sm table-striped table-bordered table-hover">
+        <thead class="thead-light">
+    <tr>
+        {% for column in column_names %}
+            <th>{{ column }}</th>
+        {% endfor %}
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in table_data %}
+        <tr>
+            {% for value in row %}
+                <td>{{ value }}</td>
+            {% endfor %}
+            <td>
+                {% if session.get('allowed_edit') == 0 %}
+                    <button class="btn btn-success btn-sm" disabled>Изменить</button>
+                {% else %}
+                    <a href="/edit/{{ table_name }}/{{ row[0] }}" class="btn btn-success btn-sm">Изменить</a>
+                {% endif %}
+
+                {% if session.get('allowed_delete') == 0 %}
+                    <button class="btn btn-danger btn-sm" disabled>Удалить</button>
+                {% else %}
+                    <a href="/delete/{{ table_name }}/{{ row[0] }}" class="btn btn-danger btn-sm">Удалить</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-center">
+    <div class="pagination">
+        {{ pagination.links }}
+    </div>
+</div>
+
+{% include 'footer.html' %}
+</body>
+</html>

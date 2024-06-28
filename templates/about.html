@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>О нас</title>
+    {% include 'header.html' %}
+</head>
+
+<body>
+
+{% include 'navbar.html' %}
+
+<div class="container mt-5">
+
+    <h1>О нас</h1>
+
+    <p>Это страница с информацией о нашем приложении и его API.</p>
+
+    <div class="mt-5">
+
+        <a class="btn btn-primary" data-toggle="collapse" href="#collapseAPI" role="button" aria-expanded="false"
+           aria-controls="collapseAPI">
+            API Endpoint
+        </a>
+
+        <div class="collapse" id="collapseAPI">
+            <div class="card card-body">
+
+                <div class="list-group">
+
+                    {% for route in app_config.routes %}
+                        <a class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between" data-toggle="collapse"
+                                 data-target="#{{ route.callname }}"
+                                 aria-expanded="false" aria-controls="{{ route.callname }}">
+                                <h5 class="mb-1">
+                                    {{ route.methods|join(', ') }}
+                                </h5>
+                                <h5 class="mb-1">{{ route.route_name }}</h5>
+                            </div>
+                            <div id="{{ route.callname }}" class="collapse">
+                                <p class="mb-1">{{ route.description }}</p>
+                            </div>
+                        </a>
+                    {% endfor %}
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% include 'footer.html' %}
+</body>
+</html>

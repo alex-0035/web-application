@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ session['translations']['cabinet'] }}</title>
+    {% include 'header.html' %}
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container mt-5">
+    <h1>{{ session['translations']['welcome'] }}, {{ username }}!</h1>
+    <p>{{ session['translations']['this_profile'] }}</p>
+
+    <!-- Use Bootstrap table classes that are compatible with both light and dark themes -->
+    <table class="table table-responsive-sm table-striped table-bordered table-hover">
+        <thead class="thead-light">
+        <tr>
+            <th>{{ session['translations']['acc_param'] }}</th>
+            <th>{{ session['translations']['acc_value'] }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for key, value in user_data.items() %}
+            <tr class="table">
+                <td>{{ key }}</td>
+                <td>{{ value }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('change_password') }}" class="btn btn-warning" style="color: white;">
+        {{ session['translations']['change_pass'] }}
+    </a>
+
+    <div class="container mt-5">
+        <h2>{{ session['translations']['feedback'] }}</h2>
+        <form action="{{ url_for('submit_feedback') }}" method="post">
+            <div class="form-group">
+                <label for="feedback">{{ session['translations']['your_feedback'] }}</label>
+                <textarea class="form-control" id="feedback" name="feedback" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">{{ session['translations']['submit'] }}</button>
+        </form>
+    </div>
+
+</div>
+{% include 'footer.html' %}
+</body>
+</html>

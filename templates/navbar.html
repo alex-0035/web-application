@@ -1,0 +1,99 @@
+<link rel="stylesheet" id="currentStyle"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/index" style="margin-left: 10px">
+        <img src="/static/icon.png" alt="CRUD WEBSITE" style="height: 75px;">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            {% if no_login %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">{{ session['translations']['login'] }}</a>
+                </li>
+            {% else %}
+                {# Dynamic menus #}
+                {% for menu in app_config.dynamic_menus %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="{{ menu.id }}" role="button" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            {{ session['translations'][menu.name] }}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="{{ menu.id }}">
+                            {% if menu.dropdown_elements is string %}
+                                {% set elements = session[menu.dropdown_elements] %}
+                            {% else %}
+                                {% set elements = menu.dropdown_elements %}
+                            {% endif %}
+
+                            {% for element in elements %}
+                                <a class="dropdown-item" href="{{ menu.href }}{{ element }}">{{ element }}</a>
+                            {% endfor %}
+                        </div>
+                    </li>
+                {% endfor %}
+
+                {# Static menus #}
+                {% for menu in app_config.static_menus %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" role="button" href="{{ menu.href }}">
+                            {{ session['translations'][menu.name] }}
+                        </a>
+                    </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+    {% if not no_login %}
+        <div class="navbar-text ml-auto d-flex align-items-center">
+            <a class="nav-link" href="/index"
+               style="margin-right: 10px;">{{ session['translations']['login'] }}: {{ username }}</a>
+            <a class="btn btn-warning text-white" href="/logout"
+               style="margin-right: 10px; white-space: nowrap;">{{ session['translations']['exit'] }}</a>
+            <button class="btn btn-secondary" id="themeToggle">{{ session['translations']['dark_theme'] }}</button>
+        </div>
+    {% endif %}
+</nav>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var themeToggleBtn = document.getElementById("themeToggle");
+        var link = document.getElementById("currentStyle");
+
+        // Проверка и применение сохраненной темы
+        var savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+            link.href = savedTheme;
+            themeToggleBtn.textContent = savedTheme.includes("darkly") ? "{{ session['translations']['light_theme'] }}" : "{{ session['translations']['dark_theme'] }}";
+        }
+
+        // Обработчик переключения темы
+        themeToggleBtn.addEventListener("click", function () {
+            if (link.href.includes("stackpath")) {
+                link.href = "https://bootswatch.com/4/darkly/bootstrap.min.css";
+                this.textContent = "{{ session['translations']['light_theme'] }}";
+            } else {
+                link.href = "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css";
+                this.textContent = "{{ session['translations']['dark_theme'] }}";
+            }
+            // Сохранение текущей темы в Local Storage
+            localStorage.setItem("theme", link.href);
+        });
+    });
+
+    function showDropdown(dropdownName) {
+        document.getElementById(dropdownName).classList.add("show");
+    }
+
+    function hideDropdown(dropdownName) {
+        document.getElementById(dropdownName).classList.add("hide");
+    }
+</script>

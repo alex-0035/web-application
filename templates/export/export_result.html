@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Результат выгрузки</title>
+    {% include 'header.html' %}</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container mt-5">
+    <h1>Результат выгрузки для таблицы "{{ table_name }}"</h1>
+    <p>Выберите формат для скачивания:</p>
+    <a href="/export/xlsx/{{ table_name }}" class="btn btn-primary">Выгрузить в XLSX</a>
+    <a href="/export/csv/{{ table_name }}" class="btn btn-primary">Выгрузить в CSV</a>
+</div>
+{% include 'footer.html' %}
+</body>
+</html>
